@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My forms — Tally</title>
+<meta name="description" content="All your forms and their submissions, in one place.">
+<link rel="canonical" href="https://tally-clone.pages.dev/inbox">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tally">
+<meta property="og:title" content="My forms — Tally">
+<meta property="og:description" content="All your forms and their submissions, in one place.">
+<meta property="og:url" content="https://tally-clone.pages.dev/inbox">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="My forms — Tally">
+<meta name="twitter:description" content="All your forms and their submissions, in one place.">
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Tally",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "url": "https://tally-clone.pages.dev/inbox",
+    "description": "All your forms and their submissions, in one place.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+]
+</script>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%237c5cff'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>T</text></svg>">
+</head>
+<body>
+<header class="site">
+  <div class="wrap nav">
+    <a class="logo" href="index.html"><span class="mark">T</span> Tally</a>
+    <nav>
+      <a href="templates.html">Templates</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="editor.html">Create a form</a>
+      <a href="inbox.html">My forms</a>
+    </nav>
+    <div class="spacer"></div>
+    <a class="btn primary" href="editor.html">+ New form</a>
+  </div>
+</header>
+
+<main class="wrap" style="padding:40px 20px 80px">
+  <h1 style="font-size:32px;letter-spacing:-.8px">My forms</h1>
+  <p class="muted">Forms and responses are stored in this browser. Click a form to see its submissions.</p>
+  <div id="list" class="form-list"></div>
+  <div id="detail" style="margin-top:32px"></div>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p class="fine" style="margin-top:0;border-top:0;padding-top:0">Unofficial rebuild for personal use — not affiliated with Tally. &nbsp;·&nbsp; <a href="index.html">Home</a> · <a href="templates.html">Templates</a> · <a href="pricing.html">Pricing</a> &nbsp;·&nbsp; <a href="free-form-builder.html">Free form builder</a> &nbsp;·&nbsp; <a href="google-forms-alternative.html">Google Forms alternative</a> &nbsp;·&nbsp; <a href="online-survey-maker.html">Survey maker</a></p>
+  </div>
+</footer>
+<script src="js/store.js"></script>
+<script>
+function fmtDate(ts){ return new Date(ts).toLocaleString(); }
+function renderList(){
+  var forms=TC.listForms();
+  var list=document.getElementById('list');
+  if(!forms.length){
+    list.innerHTML='<div class="empty"><p style="font-size:18px">No forms yet</p><p>Create your first form — it takes about a minute.</p><p style="margin-top:16px"><a class="btn primary" href="editor.html">Create a form →</a> <a class="btn" href="templates.html">Or start from a template</a></p></div>';
+    return;
+  }
+  list.innerHTML=forms.map(function(f){
+    var n=TC.listSubs(f.id).length;
+    return '<div class="form-row"><div class="meta"><h3>'+TC.esc(f.title)+'</h3>'
+      +'<p class="muted small">'+f.blocks.length+' blocks · '+n+(n===1?' response':' responses')+' · updated '+fmtDate(f.updated)
+      +(f.published?' · <span style="color:var(--green);font-weight:600">Published</span>':' · <span class="muted">Draft</span>')+'</p></div>'
+      +'<button class="btn" data-view="'+f.id+'">Submissions</button>'
+      +'<a class="btn" href="editor.html?id='+f.id+'">Edit</a>'
+      +(f.published?'<a class="btn" href="form.html?id='+f.id+'" target="_blank">Open ↗</a>':'')
+      +'<button class="btn" data-dup="'+f.id+'">Duplicate</button>'
+      +'<button class="btn danger" data-del="'+f.id+'">Delete</button></div>';
+  }).join('');
+  list.querySelectorAll('[data-view]').forEach(function(b){ b.addEventListener('click',function(){ renderDetail(b.dataset.view); }); });
+  list.querySelectorAll('[data-dup]').forEach(function(b){ b.addEventListener('click',function(){ TC.duplicateForm(b.dataset.dup); renderList(); }); });
+  list.querySelectorAll('[data-del]').forEach(function(b){ b.addEventListener('click',function(){ if(confirm('Delete this form and all its submissions?')){ TC.deleteForm(b.dataset.del); document.getElementById('detail').innerHTML=''; renderList(); } }); });
+}
+function renderDetail(id){
+  var f=TC.getForm(id); if(!f) return;
+  var subs=TC.listSubs(id);
+  var d=document.getElementById('detail');
+  var h='<h2 style="font-size:24px">'+TC.esc(f.title)+' — submissions</h2>';
+  h+='<p class="muted small" style="margin-top:6px">Share link: <a href="form.html?id='+f.id+'" target="_blank">'+TC.formUrl(f.id)+'</a></p>';
+  if(!subs.length){ h+='<div class="empty">No submissions yet. Share the link above and responses will appear here.</div>'; }
+  else{
+    var cols=[]; subs.forEach(function(s){ Object.keys(s.answers).forEach(function(k){ if(cols.indexOf(k)<0) cols.push(k); }); });
+    h+='<div style="margin-top:14px;display:flex;gap:8px"><button class="btn" id="csvBtn">Download CSV</button><button class="btn danger" id="clearBtn">Clear all</button></div>';
+    h+='<div style="overflow-x:auto"><table class="subs"><thead><tr><th>Submitted</th>'+cols.map(function(c){return '<th>'+TC.esc(c)+'</th>';}).join('')+'</tr></thead><tbody>'
+      +subs.map(function(s){ return '<tr><td>'+fmtDate(s.at)+'</td>'+cols.map(function(c){ var v=s.answers[c]; return '<td>'+TC.esc(Array.isArray(v)?v.join(', '):(v||'—'))+'</td>'; }).join('')+'</tr>'; }).join('')
+      +'</tbody></table></div>';
+  }
+  d.innerHTML=h;
+  d.scrollIntoView({behavior:'smooth'});
+  var csv=document.getElementById('csvBtn');
+  if(csv) csv.addEventListener('click',function(){
+    var rows=[['Submitted'].concat(cols)];
+    subs.forEach(function(s){ rows.push([new Date(s.at).toISOString()].concat(cols.map(function(c){ var v=s.answers[c]; return Array.isArray(v)?v.join('; '):(v||''); }))); });
+    var text=rows.map(function(r){ return r.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(','); }).join('\n');
+    var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type:'text/csv'})); a.download=f.title.replace(/[^a-z0-9]+/gi,'-').toLowerCase()+'-submissions.csv'; a.click();
+  });
+  var clr=document.getElementById('clearBtn');
+  if(clr) clr.addEventListener('click',function(){ if(confirm('Delete all submissions for this form?')){ TC.clearSubs(id); renderDetail(id); renderList(); } });
+}
+renderList();
+</script>
+</body>
+</html>

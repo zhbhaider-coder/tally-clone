@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://tally-clone.pages.dev/sitemap.xml

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Form — Tally</title>
+<meta name="description" content="Fill in a form made with Tally — the free online form builder with unlimited forms and submissions.">
+<link rel="canonical" href="https://tally-clone.pages.dev/form">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tally">
+<meta property="og:title" content="Form — Tally">
+<meta property="og:description" content="Fill in a form made with Tally — the free online form builder with unlimited forms and submissions.">
+<meta property="og:url" content="https://tally-clone.pages.dev/form">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Form — Tally">
+<meta name="twitter:description" content="Fill in a form made with Tally — the free online form builder with unlimited forms and submissions.">
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Tally",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "url": "https://tally-clone.pages.dev/form",
+    "description": "Fill in a form made with Tally — the free online form builder with unlimited forms and submissions.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+]
+</script>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%237c5cff'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>T</text></svg>">
+</head>
+<body>
+<main class="form-page" id="app">
+  <div id="formHost"><h1>Fill in this form</h1></div>
+  <div class="form-footer">
+    <a class="badge-made" href="index.html">Made with <b>Tally</b> — create your own free form</a>
+    <p class="muted small" style="margin-top:10px">Unofficial rebuild for personal use — not affiliated with Tally.</p>
+    <p class="muted small" style="margin-top:10px"><a href="free-form-builder.html">Free form builder guide</a> · <a href="google-forms-alternative.html">Google Forms alternative</a> · <a href="online-survey-maker.html">Online survey maker</a></p>
+  </div>
+</main>
+<script src="js/store.js"></script>
+<script src="js/editor.js"></script>
+<script>
+(function(){
+  var params=new URLSearchParams(location.search);
+  var id=params.get('id');
+  var host=document.getElementById('formHost');
+  var form=id?TC.getForm(id):null;
+  if(!form){
+    host.innerHTML='<div class="thanks"><div class="big">😕</div><h2>Form not found</h2><p class="muted">This form may have been deleted, or the link is wrong. Forms in this demo build live in the browser where they were created.</p><p style="margin-top:20px"><a class="btn primary" href="editor.html">Create your own form →</a></p></div>';
+    document.title='Form not found — Tally';
+    return;
+  }
+  document.title=form.title+' — Tally';
+  host.innerHTML=(form.description?'<p class="fdesc">'+TC.esc(form.description)+'</p>':'')+'<form id="pubForm" novalidate><div id="fields"></div><button class="btn primary big" type="submit" style="margin-top:8px">Submit</button></form>';
+  var h1=document.createElement('h1'); h1.textContent=form.title;
+  host.prepend(h1);
+  var fields=document.getElementById('fields');
+  form.blocks.forEach(function(b){ fields.appendChild(window.TC_renderField(b,true)); });
+  document.getElementById('pubForm').addEventListener('submit',function(e){
+    e.preventDefault();
+    var answers={}, ok=true;
+    form.blocks.forEach(function(b){
+      var wrap=fields.querySelector('[data-bid="'+b.id+'"]');
+      if(!wrap||b.type==='heading'||b.type==='text'||b.type==='divider') return;
+      var val='';
+      if(b.type==='choice'){ var r=wrap.querySelector('input[type=radio]:checked'); val=r?r.value:''; }
+      else if(b.type==='checks'){ val=Array.prototype.map.call(wrap.querySelectorAll('input[type=checkbox]:checked'),function(c){return c.value;}); }
+      else if(b.type==='rating'){ var hid=wrap.querySelector('input[type=hidden]'); val=hid?hid.value:''; }
+      else if(b.type==='file'){ var f=wrap.querySelector('input[type=file]'); val=f&&f.files.length?('file: '+f.files[0].name):''; }
+      else { var inp=wrap.querySelector('input,select,textarea'); val=inp?inp.value.trim():''; }
+      var empty=(Array.isArray(val)?val.length===0:!val);
+      if(b.required&&empty){ wrap.classList.add('invalid'); ok=false; } else wrap.classList.remove('invalid');
+      answers[b.label||b.type]=val;
+    });
+    if(!ok){ fields.querySelector('.invalid').scrollIntoView({behavior:'smooth',block:'center'}); return; }
+    TC.addSub(form.id, answers);
+    host.innerHTML='<div class="thanks"><div class="big">🎉</div><h2>Thanks for submitting!</h2><p class="muted">Your response has been recorded.</p><p style="margin-top:20px"><a class="btn" href="index.html">Create your own form →</a></p></div>';
+    window.scrollTo(0,0);
+  });
+})();
+</script>
+</body>
+</html>

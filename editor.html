@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create a form — Tally</title>
+<meta name="description" content="Build a form in seconds. Type on a blank page, add question blocks with slash commands, then publish and share the link.">
+<link rel="canonical" href="https://tally-clone.pages.dev/editor">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tally">
+<meta property="og:title" content="Create a form — Tally">
+<meta property="og:description" content="Build a form in seconds. Type on a blank page, add question blocks with slash commands, then publish and share the link.">
+<meta property="og:url" content="https://tally-clone.pages.dev/editor">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Create a form — Tally">
+<meta name="twitter:description" content="Build a form in seconds. Type on a blank page, add question blocks with slash commands, then publish and share the link.">
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Tally",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "url": "https://tally-clone.pages.dev/editor",
+    "description": "Build a form in seconds. Type on a blank page, add question blocks with slash commands, then publish and share the link.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+]
+</script>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%237c5cff'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>T</text></svg>">
+</head>
+<body>
+<header class="site">
+  <div class="wrap nav">
+    <a class="logo" href="index.html"><span class="mark">T</span> Tally</a>
+    <nav>
+      <a href="templates.html">Templates</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="editor.html">Create a form</a>
+      <a href="inbox.html">My forms</a>
+    </nav>
+    <div class="spacer"></div>
+    <a class="btn" href="inbox.html">My forms</a>
+  </div>
+</header>
+
+<main class="editor-shell">
+  <h1 class="sr-only">Create a form — free online form builder</h1>
+  <div class="ed-top">
+    <div class="tabs">
+      <button id="tabEdit" class="on">✎ Edit</button>
+      <button id="tabPrev">👁 Preview</button>
+    </div>
+    <div class="spacer"></div>
+    <span class="muted small" id="subCount">0 responses</span>
+    <button class="btn" id="viewBtn">View live ↗</button>
+    <button class="btn primary" id="publishBtn">Publish</button>
+  </div>
+
+  <input id="title" class="title-input" type="text" placeholder="Untitled form" autocomplete="off">
+  <textarea id="desc" class="desc-input" rows="2" placeholder="Add a description (optional)…"></textarea>
+
+  <div id="blockList"></div>
+
+  <div class="share-box" id="shareBox" style="display:none">
+    <span>🎉 <b>Your form is live!</b></span>
+    <code id="shareLink"></code>
+    <button class="btn" id="copyLinkBtn">Copy link</button>
+    <a class="btn primary" id="openLinkBtn" href="#" target="_blank">Open form ↗</a>
+  </div>
+  <p class="muted small" style="margin-top:16px">Forms and responses are saved in this browser (localStorage). Publish to get a shareable link — anyone with the link can fill it in on this device's browser.</p>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    <p class="fine" style="margin-top:0;border-top:0;padding-top:0">Unofficial rebuild for personal use — not affiliated with Tally. &nbsp;·&nbsp; <a href="index.html">Home</a> · <a href="templates.html">Templates</a> · <a href="pricing.html">Pricing</a> · <a href="inbox.html">My forms</a> &nbsp;·&nbsp; <a href="free-form-builder.html">Free form builder</a> &nbsp;·&nbsp; <a href="google-forms-alternative.html">Google Forms alternative</a> &nbsp;·&nbsp; <a href="online-survey-maker.html">Survey maker</a></p>
+  </div>
+</footer>
+<script src="js/store.js"></script>
+<script src="js/templates.js"></script>
+<script src="js/editor.js"></script>
+<script>
+document.getElementById('copyLinkBtn').addEventListener('click',function(){
+  var l=document.getElementById('shareLink').textContent;
+  document.getElementById('openLinkBtn').href=l;
+});
+document.getElementById('publishBtn').addEventListener('click',function(){
+  setTimeout(function(){ document.getElementById('openLinkBtn').href=document.getElementById('shareLink').textContent; },100);
+});
+</script>
+</body>
+</html>

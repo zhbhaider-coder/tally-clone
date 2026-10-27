@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>100+ Free Online Form Templates | Fully Customizable | Tally</title>
+<meta name="description" content="Explore free, fully customizable form and survey templates — contact forms, job applications, feedback surveys, event registration and more.">
+<link rel="canonical" href="https://tally-clone.pages.dev/templates">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Tally">
+<meta property="og:title" content="100+ Free Online Form Templates | Fully Customizable | Tally">
+<meta property="og:description" content="Explore free, fully customizable form and survey templates — contact forms, job applications, feedback surveys, event registration and more.">
+<meta property="og:url" content="https://tally-clone.pages.dev/templates">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="100+ Free Online Form Templates | Fully Customizable | Tally">
+<meta name="twitter:description" content="Explore free, fully customizable form and survey templates — contact forms, job applications, feedback surveys, event registration and more.">
+<script type="application/ld+json">
+[
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Tally",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "url": "https://tally-clone.pages.dev/templates",
+    "description": "Explore free, fully customizable form and survey templates — contact forms, job applications, feedback surveys, event registration and more.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+]
+</script>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%237c5cff'/><text x='50' y='68' font-size='52' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>T</text></svg>">
+</head>
+<body>
+<header class="site">
+  <div class="wrap nav">
+    <a class="logo" href="index.html"><span class="mark">T</span> Tally</a>
+    <nav>
+      <a href="templates.html">Templates</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="editor.html">Create a form</a>
+      <a href="inbox.html">My forms</a>
+    </nav>
+    <div class="spacer"></div>
+    <a class="btn" href="inbox.html">Log in</a>
+    <a class="btn primary" href="editor.html">Create a form — it's free</a>
+  </div>
+</header>
+
+<section class="block" style="padding-top:56px">
+  <div class="wrap">
+    <h1 style="font-size:clamp(30px,4vw,44px);letter-spacing:-1px">Explore form &amp; survey templates</h1>
+    <p class="sec-sub">Explore, pick, and customize templates to your needs. Every template opens in the editor — change anything, then publish.</p>
+    <div class="chiprow" id="filters">
+      <button class="chip on" data-cat="All">All</button>
+      <button class="chip" data-cat="Creators">Creators</button>
+      <button class="chip" data-cat="Product">Product</button>
+      <button class="chip" data-cat="Marketing">Marketing</button>
+      <button class="chip" data-cat="HR">HR</button>
+      <button class="chip" data-cat="Office">Office</button>
+      <button class="chip" data-cat="Personal">Personal</button>
+    </div>
+    <div class="tpl-grid" id="tplGrid"></div>
+  </div>
+</section>
+
+<section class="block alt">
+  <div class="wrap center">
+    <h2 class="sec">Can't find the right template?</h2>
+    <p class="sec-sub" style="margin-left:auto;margin-right:auto">Start from a blank page and build exactly what you need — it only takes a minute.</p>
+    <div style="margin-top:24px"><a class="btn primary big" href="editor.html">Start from scratch →</a></div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div class="cols">
+      <div><a class="logo" href="index.html"><span class="mark">T</span> Tally</a><p style="margin-top:12px">The simplest way to create beautiful forms for free.</p></div>
+      <div><h4>Product</h4><ul><li><a href="templates.html">Templates</a></li><li><a href="pricing.html">Pricing</a></li><li><a href="editor.html">Create a form</a></li><li><a href="inbox.html">My forms</a></li></ul></div>
+      <div><h4>Resources</h4><ul><li><a href="templates.html">Form templates</a></li><li><a href="free-form-builder.html">Free form builder guide</a></li><li><a href="google-forms-alternative.html">Google Forms alternative</a></li><li><a href="online-survey-maker.html">Online survey maker</a></li><li><a href="pricing.html">Compare plans</a></li></ul></div>
+      <div><h4>Company</h4><ul><li><a href="pricing.html">Pricing</a></li><li><a href="index.html">About</a></li></ul></div>
+    </div>
+    <p class="fine">Unofficial rebuild for personal use — not affiliated with Tally.</p>
+  </div>
+</footer>
+<script src="js/store.js"></script>
+<script src="js/templates.js"></script>
+<script>
+var cat='All';
+function render(){
+  var grid=document.getElementById('tplGrid');
+  var list=window.TEMPLATES.filter(function(t){return cat==='All'||t.cat===cat;});
+  grid.innerHTML=list.map(function(t){
+    return '<div class="tpl"><div class="thumb">'+t.icon+'</div><div class="body"><h3>'+t.name+'</h3>'
+      +'<p>'+t.desc+'</p><span class="pill" style="align-self:flex-start">'+t.cat+'</span>'
+      +'<div style="margin-top:14px;display:flex;gap:8px"><a class="btn primary" href="editor.html?template='+t.slug+'">Use template</a>'
+      +'<a class="btn" href="editor.html?template='+t.slug+'">Preview</a></div></div></div>';
+  }).join('');
+}
+document.querySelectorAll('#filters .chip').forEach(function(b){
+  b.addEventListener('click',function(){
+    cat=b.dataset.cat;
+    document.querySelectorAll('#filters .chip').forEach(function(x){x.classList.toggle('on',x===b);});
+    render();
+  });
+});
+render();
+</script>
+</body>
+</html>
